@@ -12,13 +12,16 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Checkout apis repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
+      with:
+        fetch-tags: true
+        fetch-depth: 10
     - name: Get current tag
       id: fetch_tag
       run: |
         current_tag=$(git tag --points-at HEAD)
         if [[ -z $current_tag ]]; then
-          exit(1)
+          exit 1
         fi
         echo "current_tag=$current_tag" >> $GITHUB_OUTPUT
       continue-on-error: false
