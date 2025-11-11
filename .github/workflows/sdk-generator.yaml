@@ -1,0 +1,38 @@
+name: SDK Generation CI
+
+on:
+  push:
+    tags:
+    - v*.*.*
+
+jobs:
+  generate-go-sdk:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout apis repository
+      uses: actions/checkout@v4
+    - name: Set up Buf
+      uses: bufbuild/buf-action@v1
+      with:
+        token: ${{ secrets.BUF_TOKEN }}
+    - name: Generate Go code
+      run: buf generate
+    - name: Checkout gengo repository
+      uses: actions/checkout@v4
+      with:
+        repository: vinea-dev/gengo
+        path: gen/go
+        token: ${{ secrets.SDK_GENERATOR_KEY }}
+    - name: Commit and push changes
+      run: |
+        cd gengo
+        git config --global user.name "Github Action Bot"
+        git config --global user.email "vinea-dev@users.noreply.github.com"
+        if [[ -n "$(git status --porcelain)" ]]; then
+          git add .
+          git commit -m "feat(sdk): regenerate sdk from apis commit ${{ github.sha }}"
+          git push
+        else
+          echo "No changes to commit"
+        fi
+      working-directory: ${{ github.workspace }}
