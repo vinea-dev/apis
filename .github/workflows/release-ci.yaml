@@ -27,10 +27,11 @@ jobs:
         fi
         ./scripts/auto_bump_version.sh $type
         git push origin main --follow-tags
+        echo "NEXT_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         draft: false
         prerelease: false
-        tag_name: $(git tag --points-at HEAD)
+        tag_name: ${{ env.NEXT_TAG }}
         generate_release_notes: true
