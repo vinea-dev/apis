@@ -4,10 +4,10 @@ package foobar.v1alpha1;
 
 option java_multiple_files = true;
 
-// FoobarAPI 
+// FoobarAPI
 service FoobarAPI {
-    // comments.
-    rpc Echo(EchoRequest) returns (EchoResponse) {}
+  // comments.
+  rpc Echo(EchoRequest) returns (EchoResponse) {}
 }
 
 // EchoRequest
