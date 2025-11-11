@@ -11,7 +11,10 @@ service FoobarAPI {
 }
 
 // EchoRequest
-message EchoRequest {}
+message EchoRequest {
+  // request id
+  string id = 1;
+}
 
 // EchoRequest
 message EchoResponse {}
