@@ -25,4 +25,4 @@ jobs:
         lint: ${{ github.event_name == 'push' }}
         format: ${{ github.event_name == 'push' }}
         breaking: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, 'buf skip breaking') }}
-        breaking_against: .git#branch=main
+        breaking_against: https://github.com/vinea-dev/apis.git#branch=main
