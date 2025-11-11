@@ -13,3 +13,11 @@ plugins:
   out: gen/go
   opt:
   - paths=source_relative
+- remote: buf.build/community/danielgtaylor-betterproto:v1.2.5
+  out: gen/python
+  opt:
+  - paths=source_relative
+- remote: buf.build/connectrpc/python:v0.5.0
+  out: gen/python
+  opt:
+  - paths=source_relative

@@ -23,4 +23,6 @@ message EchoResponse {
   string message = 1;
   // code .
   int32 code = 2;
+  // details
+  string details = 3;
 }

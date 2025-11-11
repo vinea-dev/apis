@@ -39,7 +39,8 @@
 				"oderwat.indent-rainbow",
 				"bufbuild.vscode-buf",
 				"kennylong.kubernetes-yaml-formatter",
-				"ms-vscode.makefile-tools"
+				"ms-vscode.makefile-tools",
+				"github.vscode-github-actions"
 			]
 		}
 	},
