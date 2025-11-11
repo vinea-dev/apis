@@ -16,14 +16,18 @@ jobs:
       uses: bufbuild/buf-action@v1
       with:
         token: ${{ secrets.BUF_TOKEN }}
-    - name: Generate Go code
-      run: buf generate
     - name: Checkout gengo repository
       uses: actions/checkout@v4
       with:
         repository: vinea-dev/gengo
         path: gen/go
-        ssk_key: ${{ secrets.SDK_GENERATOR_KEY }}
+        ssk-key: ${{ secrets.SDK_GENERATOR_KEY }}
+    - name: Cleanup the target directory
+      run: |
+        find gen/go -type f -regex '.*\(.go\|.py\|.pyc\|.pyi\|.java\|.html\)$' -delete
+        find gen/go -type d -empty -delete
+    - name: Generate Go SDK
+      run: buf generate
     - name: Commit and push changes
       run: |
         cd gen/go
