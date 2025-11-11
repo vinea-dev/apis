@@ -12,5 +12,6 @@ service FoobarAPI {
 
 // EchoRequest
 message EchoRequest {}
+
 // EchoRequest
 message EchoResponse {}
