@@ -16,10 +16,13 @@ jobs:
     - name: Get current tag
       id: fetch_tag
       run: |
-        echo "current tag: $(git tag --points-at HEAD)"
-        echo "current_tag=$(git tag --points-at HEAD)" >> $GITHUB_OUTPUT
+        current_tag=$(git tag --points-at HEAD)
+        if [[ -z $current_tag ]]; then
+          exit(1)
+        fi
+        echo "current_tag=$current_tag" >> $GITHUB_OUTPUT
+      continue-on-error: false
     - name: Set up Buf
-      if: ${{steps.fetch_tag.outputs.current_tag}} != ""
       uses: bufbuild/buf-action@v1
       with:
         token: ${{ secrets.BUF_TOKEN }}
