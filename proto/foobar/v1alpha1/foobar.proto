@@ -18,4 +18,7 @@ message EchoRequest {
 }
 
 // EchoRequest
-message EchoResponse {}
+message EchoResponse {
+  // message.
+  string message = 1;
+}
