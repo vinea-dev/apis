@@ -49,7 +49,7 @@ jobs:
         git config --global user.email "vinea-dev@users.noreply.github.com"
         if [[ -n "$(git status --porcelain)" ]]; then
           git add .
-          git commit -m "feat(sdk): regenerate sdk from apis commit ${{ github.sha }}"
+          git commit -m "feat(sdk): regenerate sdk from apis commit ${{steps.fetch_tag.outputs.current_tag}}"
           git tag ${{steps.fetch_tag.outputs.current_tag}}
           git push -f origin main --tags
         else
