@@ -13,7 +13,13 @@ jobs:
     steps:
     - name: Checkout apis repository
       uses: actions/checkout@v4
+    - name: Get current tag
+      id: fetch_tag
+      run: |
+        echo $(git tag --points-at HEAD)
+        echo "current_tag=$(git tag --points-at HEAD)" >> $GITHUB_OUTPUT
     - name: Set up Buf
+      if: ${{steps.fetch_tag.outputs.current_tag}} != ""
       uses: bufbuild/buf-action@v1
       with:
         token: ${{ secrets.BUF_TOKEN }}
@@ -32,14 +38,14 @@ jobs:
     - name: Commit and push changes
       run: |
         cd gen/go
-        echo ${{ github.ref_name }}
         go mod tidy
         git config --global user.name "Github Action Bot"
         git config --global user.email "vinea-dev@users.noreply.github.com"
         if [[ -n "$(git status --porcelain)" ]]; then
           git add .
           git commit -m "feat(sdk): regenerate sdk from apis commit ${{ github.sha }}"
-          git push
+          git tag ${{steps.fetch_tag.outputs.current_tag}}
+          git push -f origin main --tags
         else
           echo "No changes to commit"
         fi
