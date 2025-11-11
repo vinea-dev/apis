@@ -24,7 +24,7 @@ jobs:
       with:
         repository: vinea-dev/gengo
         path: gen/go
-        token: ${{ secrets.SDK_GENERATOR_KEY }}
+        ssk_key: ${{ secrets.SDK_GENERATOR_KEY }}
     - name: Commit and push changes
       run: |
         cd gengo
