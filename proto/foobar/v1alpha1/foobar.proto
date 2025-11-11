@@ -18,11 +18,4 @@ message EchoRequest {
 }
 
 // EchoRequest
-message EchoResponse {
-  // message.
-  string message = 1;
-  // code .
-  int32 code = 2;
-  // details
-  string details = 3;
-}
+message EchoResponse {}
