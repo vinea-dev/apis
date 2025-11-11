@@ -1,9 +1,10 @@
 name: SDK Generation CI
 
 on:
-  push:
-    tags:
-    - '*'
+  workflow_run:
+    workflows: [ "Release CI" ]
+    types:
+    - completed
 
 jobs:
   generate-go-sdk:
