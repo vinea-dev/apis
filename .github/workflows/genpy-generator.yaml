@@ -36,14 +36,18 @@ jobs:
         ssh-key: ${{ secrets.GENPY_GENERATOR_KEY }}
     - name: Cleanup the target directory
       run: |
-        [ -d gen/python/genpy ] && find gen/python/genpy -type f -regex '.*\(.go\|.py\|.pyc\|.pyi\|.java\|.html\)$' -delete
-        [ -d gen/python/genpy ] && find gen/python/genpy -type d -empty -delete
+        if [[ -d gen/python/genpy ]]; then
+          find gen/python/genpy -type f -regex '.*\(.go\|.py\|.pyc\|.pyi\|.java\|.html\)$' -delete
+          find gen/python/genpy -type d -empty -delete
+        fi
     - name: Generate Go SDK
       run: buf generate
     - name: Commit and push changes
       run: |
         cd gen/python
-        [ -d gen/python/genpy ] && find ./genpy/ -type d -not -path "*.git*" -not -path "*.devcontainer*" -exec touch {}/__init__.py \;
+        if [[ -d genpy ]]; then
+          find ./genpy/ -type d -not -path "*.git*" -not -path "*.devcontainer*" -exec touch {}/__init__.py \;
+        fi
         git config --global user.name "Github Action Bot"
         git config --global user.email "vinea-dev@users.noreply.github.com"
         if [[ -n "$(git status --porcelain)" ]]; then
