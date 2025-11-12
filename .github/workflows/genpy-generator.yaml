@@ -1,0 +1,57 @@
+name: Python SDK Generation CI
+
+on:
+  workflow_run:
+    workflows: [ "Release CI" ]
+    types:
+    - completed
+
+jobs:
+  generate-go-sdk:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    - name: Checkout apis repository
+      uses: actions/checkout@v5
+      with:
+        fetch-tags: true
+        fetch-depth: 10
+    - name: Get current tag
+      run: |
+        current_tag=$(git tag --points-at HEAD)
+        if [[ -z $current_tag ]]; then
+          exit 1
+        fi
+        echo "CURRENT_TAG=$current_tag" >> $GITHUB_ENV
+      continue-on-error: false
+    - name: Set up Buf
+      uses: bufbuild/buf-action@v1
+      with:
+        token: ${{ secrets.BUF_TOKEN }}
+    - name: Checkout gengo repository
+      uses: actions/checkout@v4
+      with:
+        repository: vinea-dev/genpy
+        path: gen/python
+        ssh-key: ${{ secrets.GENPY_GENERATOR_KEY }}
+    - name: Cleanup the target directory
+      run: |
+        find gen/python -type f -regex '.*\(.go\|.py\|.pyc\|.pyi\|.java\|.html\)$' -delete
+        find gen/python -type d -empty -delete
+    - name: Generate Go SDK
+      run: buf generate
+    - name: Commit and push changes
+      run: |
+        cd gen/python
+        find . -type d -not -path "*.git*" -not -path "*.devcontainer*" -exec touch {}/__init__.py \;
+        git config --global user.name "Github Action Bot"
+        git config --global user.email "vinea-dev@users.noreply.github.com"
+        if [[ -n "$(git status --porcelain)" ]]; then
+          git add .
+          git commit -m "feat(sdk): regenerate sdk from apis commit ${{ env.CURRENT_TAG }}"
+          git tag ${{ env.CURRENT_TAG }}
+          git push -f origin main --tags
+        else
+          echo "No changes to commit"
+        fi
+      working-directory: ${{ github.workspace }}
