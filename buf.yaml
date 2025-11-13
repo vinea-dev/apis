@@ -5,9 +5,20 @@ modules:
 lint:
   use:
   - STANDARD
-  - COMMENTS
+  - COMMENT_ENUM
+  - COMMENT_ENUM_VALUE
+  - COMMENT_FIELD
+  - COMMENT_ONEOF
+  - COMMENT_RPC
+  - COMMENT_MESSAGE
+  - COMMENT_SERVICE
   service_suffix: API
+  enum_zero_value_suffix: _UNSPECIFIED
+  rpc_allow_google_protobuf_empty_requests: false
+  rpc_allow_google_protobuf_empty_responses: false
 breaking:
   use:
   - FILE
   ignore_unstable_packages: true
+deps:
+- buf.build/protocolbuffers/wellknowntypes:v33.0
