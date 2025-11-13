@@ -40,7 +40,9 @@
 				"bufbuild.vscode-buf",
 				"kennylong.kubernetes-yaml-formatter",
 				"ms-vscode.makefile-tools",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"google.gemini-cli-vscode-ide-companion",
+				"google.geminicodeassist"
 			]
 		}
 	},

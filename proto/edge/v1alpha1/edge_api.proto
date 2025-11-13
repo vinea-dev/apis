@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package edge.v1alpha1;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/vinea-dev/gengo/edge/v1alpha1;edge";
+option java_multiple_files = true;
+
+// EdgeAPI is a service for edge devices to connect and receive jobs.
+service EdgeAPI {
+  // Register registers an agent with the server and returns a stream of
+  // responses, starting with the agent's ID.
+  rpc Register(RegisterRequest) returns (stream RegisterResponse) {}
+  // Subscribe is a long-polling RPC for an agent to receive jobs from the
+  // server. It waits until a job is available or the timeout is reached.
+  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse) {}
+}
+
+// RegisterRequest is the request message for the Register RPC.
+message RegisterRequest {
+  // device_fingerprint is a unique identifier for the device registering.
+  string device_fingerprint = 1;
+}
+
+// RegisterResponse is the response message for the Register RPC.
+message RegisterResponse {
+  // id is the unique identifier assigned to the agent by the server.
+  string id = 1;
+}
+
+// SubscribeRequest is the request message for the Subscribe RPC.
+message SubscribeRequest {
+  // agent_id is the unique identifier of the agent that is subscribing.
+  string agent_id = 1;
+  // timeout is the maximum duration the server should wait for a job before
+  // responding.
+  google.protobuf.Duration timeout = 2;
+}
+
+// SubscribeResponse is the response message for the Subscribe RPC, containing
+// job details.
+message SubscribeResponse {
+  // job_id is the unique identifier for the received job.
+  string job_id = 1;
+  // job_describe is a description of the job.
+  string job_describe = 2;
+  // job_type is the type of the job.
+  JobType job_type = 3;
+}
+
+// JobType defines the different types of jobs that can be assigned.
+enum JobType {
+  // JOB_TYPE_UNSPECIFIED is the default, unknown job type.
+  JOB_TYPE_UNSPECIFIED = 0;
+  // JOB_TYPE_SCHEDULED is a job that is scheduled to run at a specific time
+  // or interval.
+  JOB_TYPE_SCHEDULED = 1;
+}

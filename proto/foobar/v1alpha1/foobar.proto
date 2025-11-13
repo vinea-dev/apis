@@ -5,20 +5,23 @@ package foobar.v1alpha1;
 option go_package = "github.com/vinea-dev/gengo/foobar/v1alpha1;foobar";
 option java_multiple_files = true;
 
-// FoobarAPI
+// FoobarAPI is a simple example service.
 service FoobarAPI {
-  // comments.
+  // Echo is a simple RPC that echoes the request ID in the response,
+  // along with a message.
   rpc Echo(EchoRequest) returns (EchoResponse) {}
 }
 
-// EchoRequest
+// EchoRequest is the request message for the Echo RPC.
 message EchoRequest {
-  // request id
+  // id is the unique identifier for the request.
   string id = 1;
 }
 
-// EchoRequest
+// EchoResponse is the response message for the Echo RPC.
 message EchoResponse {
-  // response id
+  // id is the identifier from the request.
   string id = 1;
+  // message is a response message.
+  string message = 2;
 }
