@@ -24,6 +24,7 @@ Understanding the hierarchy is crucial for correct package naming.
 ├── buf.yaml                # Buf module configuration
 ├── buf.gen.yaml            # Code generation settings
 └── AGENTS.md               # This file
+```
 
 ## 3. Coding Conventions (Strict Mode)
 
